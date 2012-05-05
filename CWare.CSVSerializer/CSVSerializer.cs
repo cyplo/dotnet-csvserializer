@@ -43,7 +43,8 @@ namespace CWare
         {
             var result = "";
             //detect collection
-            if (property.GetType() is IEnumerable)
+            if (property.PropertyType.GetInterfaces().Contains(typeof(IEnumerable)) &&
+                property.PropertyType != typeof(string))
             {
         
                 var collection = property.GetValue(item, null) as IEnumerable;
