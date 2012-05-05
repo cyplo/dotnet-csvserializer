@@ -12,14 +12,14 @@ namespace CWare
     [AttributeUsage(AttributeTargets.Property)]
     public class CSVSerializablePropertyAttribute : Attribute { }
 
-    public class CSVAttributeBasedSerializer<T> where T : CSVSerializable
+    public class CSVSerializer<T> where T : CSVSerializable
     {
 
         private IEnumerable<T> _items;
         private Predicate<PropertyInfo> _predicate;
 
 
-        public CSVAttributeBasedSerializer(IEnumerable<T> items, Predicate<PropertyInfo> predicate = null)
+        public CSVSerializer(IEnumerable<T> items, Predicate<PropertyInfo> predicate = null)
         {
             _items = items;
             if (predicate == null)
@@ -58,7 +58,10 @@ namespace CWare
                 {
                     result += COLLECTION_ITEMS_SEPARATOR+enumerator.Current.ToString();
                 }
+                return result;
             }
+            result = property.GetValue(item, null).ToString();
+
             return result;
         }
 
