@@ -66,15 +66,11 @@ namespace CWare
             return result;
         }
 
-        private string SerializeItem(T item)
+        private string SerializeItem(T item, IEnumerable<PropertyInfo> properties)
         {
-            var properties = from property in typeof(T).GetProperties()
-                             where _predicate(property)
-                             select property;
-
             var result = "";
 
-            if (!properties.Any()) { return result; }
+            
 
             result += SerializeProperty(item, properties.First());
 
@@ -90,9 +86,24 @@ namespace CWare
         {
             var result = "";
 
+            var properties = from property in typeof(T).GetProperties()
+                             where _predicate(property)
+                             select property;
+
+            if (!properties.Any()) { return result; }
+
+            //headline
+            result += properties.First().Name;
+            for(int i =1;i<properties.Count();++i)
+            {
+                var property=properties.ElementAt(i);
+                result += CELL_SEPARATOR + property.Name;
+            }
+            result += Environment.NewLine;
+
             foreach (var item in _items)
             {
-                result += SerializeItem(item) + Environment.NewLine;
+                result += SerializeItem(item, properties) + Environment.NewLine;
             }
             return result;
         }
