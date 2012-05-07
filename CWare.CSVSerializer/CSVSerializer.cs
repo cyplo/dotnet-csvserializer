@@ -61,7 +61,9 @@ namespace CWare
                 }
                 return result;
             }
-            result = property.GetValue(item, null).ToString();
+            var value = property.GetValue(item, null);
+            
+            result += value!=null?value.ToString():"";
 
             return result;
         }
